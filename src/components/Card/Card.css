@@ -1,0 +1,4 @@
+.card:hover {
+    animation: pulse;
+    animation-duration: .3s;
+}

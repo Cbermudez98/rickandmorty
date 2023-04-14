@@ -1,15 +1,23 @@
 import "./App.css";
-import { AppBar } from "./components/AppBar";
-import { Card } from "./components/Card";
-import { Paginator } from "./components/Paginator";
+import "animate.css";
+
+import { AppBar } from "./components/AppBar/AppBar";
+import { Card } from "./components/Card/Card";
+import { Paginator } from "./components/Paginator/Paginator";
 
 import { get } from "./utils/http";
 
 import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+import { setPaginator } from "./redux/paginatorSlice";
 
 const API = import.meta.env.VITE_API;
 
 const App = () => {
+  const search = useSelector((state) => state.search);
+  const dispatch = useDispatch();
+
   const [characters, setCharacters] = useState([]);
   const [pages, setPages] = useState({});
   const [character, setCharacter] = useState("");
@@ -23,32 +31,9 @@ const App = () => {
       url += `&name=${character}`;
     }
     const res = await get(url);
-    setMaxPage(res.info.pages);
-    handlePages(res.info, page);
+    dispatch(setPaginator({maxPages: res.info.pages, current: page}));
+    // handlePages(res.info, page);
     setCharacters(res.results);
-  };
-
-  const getPages = (page, currentPage) => {
-    const res = [];
-    let index = 0;
-    let limit = 4;
-    if (page === currentPage) return pages.pages;
-    currentPage--;
-    while(index < limit) {
-      index++;
-      res.push(currentPage++);
-    }
-    res.push("...");
-    return res;
-  };
-
-  const handlePages = (info, page) => {
-    let pageObj = {
-      next: page + 1,
-      prev: page - 1,
-      pages: getPages(info.pages, page)
-    };
-    setPages(pageObj);
   };
 
   const handleChangePage = (page) => {
@@ -62,9 +47,9 @@ const App = () => {
       characters.slice(idx * 4, idx * 4 + 4)
     );
     const content = itemsRows.map((row, idx) => (
-      <div className="row" key={idx}>
+      <div className="row d-flex justify-content-center" key={idx}>
         {row.map((item) => (
-          <Card className="col-4 col-md-4 col-sm-2" key={item.id} info={item} />
+          <Card className="col-xl-4 col-md-3 col-sm-2" key={item.id} info={item} />
         ))}
       </div>
     ));
@@ -72,15 +57,18 @@ const App = () => {
   };
 
   useEffect(() => {
+    doSearch(search.search, search.page);
+  }, [search.search, search.page]);
+
+  useEffect(() => {
     doSearch();
   }, [init]);
 
   return (
     <>
-      <AppBar cbSearch={doSearch} />
       <div className="container">{render()}</div>
       <div className="d-flex justify-content-center">
-      <Paginator info={pages} cb={handleChangePage}/>
+        <Paginator info={pages}/>
       </div>
     </>
   );

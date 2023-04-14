@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 
-export const AppBar = ({cbSearch}) => {
+import { type } from "../../redux/searchSlice";
+
+export const AppBar = () => {
   const [search, setSearch] = useState("");
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    cbSearch(search);
-    if (search.length >= 3) {
-    }
+    dispatch(type({search}));
   }, [search]);
 
   return (
