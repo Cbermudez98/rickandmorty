@@ -12,7 +12,7 @@ const getPages = (page, currentPage) => {
     const res = [];
     let index = 0;
     let limit = 4;
-    if (page === currentPage) return page;
+    if (page === currentPage) return [page];
     currentPage--;
     while(index < limit) {
         index++;

@@ -68,7 +68,7 @@ const App = () => {
     <>
       <div className="container">{render()}</div>
       <div className="d-flex justify-content-center">
-        <Paginator info={pages}/>
+        <Paginator/>
       </div>
     </>
   );

@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.min.js";
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
 import { RouterProvider } from 'react-router-dom';
 import router from './routes/Route';
